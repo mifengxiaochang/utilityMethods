@@ -2,11 +2,725 @@
  * @Author: B2C
  * @since: 2021-06-18 13:55:49
  * @LastAuthor: zhixiliu
- * @lastTime: 2021-06-18 14:24:25
+ * @lastTime: 2021-06-18 15:21:23
  * @message: file content
  * @The path of the file relative to the project: \hub\utilityMethods\utils.js
  */
-// 269个JavaScript工具函数，助你提升工作效率（下）
+// 200多个JavaScript工具函数
+// 1.匹配正整数
+
+// 匹配正整数
+let isPositiveNum = val => {
+    return /^[1-9]d*$/.test(val);
+};
+console.log(isPositiveNum(9)) //true
+console.log(isPositiveNum(2.2)) //false
+// 2.匹配负整数
+
+// 匹配负整数
+ let isNegativeNum = val => {
+     return /^-[1-9]d*$/.test(val);
+ };
+ console.log(isNegativeNum(-9)) //true
+ console.log(isNegativeNum(2.2)) //false
+// 3.匹配整数
+
+// 匹配整数
+let isInteger = val => {
+    return /^(-|\+)?\d+$/.test(val);
+};
+console.log(isInteger(-9)) //true
+console.log(isInteger(2.2)) //false
+// 4.匹配非负浮点数
+// 匹配非负浮点数
+let isNotNegativeFloatNum = val => {
+    return /^\d+(\.\d+)?$/.test(val);
+};
+console.log(isNotNegativeFloatNum(-9)) //false
+console.log(isNotNegativeFloatNum(2.2)) //true
+// 5.匹配由 26 个英文字母组成的字符串
+
+//匹配由 26 个英文字母组成的字符串
+let isAZaz = val => {
+    return /^[A-Za-z]+$/.test(val);
+};
+console.log(isAZaz('122a')) //false
+console.log(isAZaz('abc')) //true
+// 6.匹配由 26 个英文字母的大写组成的字符串
+
+//匹配由 26 个英文字母的大写组成的字符串
+let isAZ = val => {
+    return /^[A-Z]+$/.test(val);
+};
+console.log(isAZ('Acs')) //false
+console.log(isAZ('ABC')) //true
+// 7.匹配由 26 个英文字母的小写组成的字符串
+
+//匹配由 26 个英文字母的小写组成的字符串
+let isaz = val => {
+    return /^[a-z]+$/.test(val);
+};
+console.log(isaz('Acs')) //false
+console.log(isaz('abc')) //true
+// 8.匹配电子邮件地址
+
+// 匹配电子邮件地址
+let isEmailAddress = val => {
+    return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(val) || /w+([-+.]w+)*@w+([-.]w+)*.w+([-.]w+)*/.test(val);
+};
+console.log(isEmailAddress('Acs')) //false
+console.log(isEmailAddress('133@qq.com')) //true
+// 9.返回数组中的最大值
+// arrayMax: 返回数组中的最大值
+// 将Math.max()与扩展运算符 (...) 结合使用以获取数组中的最大值。
+let arrayMax = arr => Math.max(...arr);
+let arr = [1,2,3,5];
+console.log(arrayMax(arr)) //5
+// 10.返回数组中的最小值
+// arrayMin: 返回数组中的最小值
+// 将Math.min()与扩展运算符 (...) 结合使用以获取数组中的最小值。
+let arrayMin = arr => Math.min(...arr);
+let arr = [1, 2, 3, 5];
+console.log(arrayMin(arr)) //1
+// 11.将数组块划分为指定大小的较小数组
+// chunk: 将数组块划分为指定大小的较小数组。
+// 使用Array.from()创建新的数组, 这符合将生成的区块数。使用Array.slice()将新数组的每个元素映射到size长度的区块。如果原始数组不能均匀拆分, 则最终的块将包含剩余的元素。
+let chunk = (arr, size) => Array.from({
+    length: Math.ceil(arr.length / size)
+}, (v, i) => arr.slice(i * size, i * size + size));
+let arr = [1, 2, 3, 5];
+console.log(chunk(arr,2)) //0: Array [ 1, 2 ],1: Array [ 3, 5 ],
+// 12.从数组中移除 falsey 值
+// compact: 从数组中移除 falsey 值。
+// 使用Array.filter()筛选出 falsey 值 (false、null、0、""、undefined和NaN).
+let compact = arr => arr.filter(Boolean);
+let arr = [false,null,0,"",undefined,NaN,1]
+console.log(compact(arr)) //[ 1 ]
+// 13.计算数组中值的出现次数
+// countOccurrences: 计算数组中值的出现次数
+// 使用Array.reduce()在每次遇到数组中的特定值时递增计数器。
+let countOccurrences = (arr, value) => arr.reduce((a, v) => v === value ? a + 1 : a + 0, 0);
+let arr = [1,2,1,2,3,3,3,3];
+console.log(countOccurrences(arr,3))//4
+// 14.深拼合数组
+// deepFlatten: 深拼合数组
+// 使用递归。使用Array.concat()与空数组 ([]) 和跨页运算符 (...) 来拼合数组。递归拼合作为数组的每个元素。
+let deepFlatten= arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : v));
+let arr = [1, 2, [1, 2, [1, 2, [2, 3]]]];
+console.log(deepFlatten(arr)) // [ 1, 2, 1, 2, 1, 2, 2, 3 ]
+// 15.返回两个数组之间的差异
+// difference: 返回两个数组之间的差异
+// 从b创建Set, 然后使用Array.filter() on 只保留a b中不包含的值.
+let difference = (a, b) => {
+    const s = new Set(b);
+    return a.filter(x => !s.has(x));
+};
+let arr = [1,2,3];
+let arr2 = [2,3,4];
+console.log(difference(arr,arr2))//[1]
+console.log(difference(arr2,arr))//[4]
+// 16.返回数组的所有不同值
+// distinctValuesOfArray: 返回数组的所有不同值
+// 使用 ES6 Set和...rest运算符放弃所有重复的值。
+let distinctValuesOfArray = arr => [...new Set(arr)];
+let arr = [1, 2, 3, 1, 2];
+console.log(distinctValuesOfArray(arr)) // [ 1, 2, 3 ]
+// 17.返回数组中的每个第 n 个元素
+// everyNth: 返回数组中的每个第 n 个元素
+// 使用Array.filter()创建一个包含给定数组的每个第 n 个元素的新数组。
+let everyNth = (arr, nth) => arr.filter((e, i) => i % nth === 0);
+// 18.筛选出数组中的非唯一值
+// filterNonUnique：筛选出数组中的非唯一值
+// 对于只包含唯一值的数组, 请使用Array.filter()。
+let filterNonUnique = arr => arr.filter(i => arr.indexOf(i) === arr.lastIndexOf(i));
+// 20.拼合数组
+// flatten: 拼合数组
+// 使用Array.reduce()获取数组中的所有元素和concat()以拼合它们
+let flatten = arr => arr.reduce((a, v) => a.concat(v), []);
+// 21.将数组向上拼合到指定深度
+// falttenDepth: 将数组向上拼合到指定深度
+// 使用递归, 递减depth, 每层深度为1。使用Array.reduce()和Array.concat()来合并元素或数组。基本情况下, 对于等于1的depth停止递归。省略第二个元素,depth仅拼合到1的深度 (单个拼合)。
+// falttenDepth: (arr, depth = 1) => depth != 1 ? arr.reduce((a, v) => a.concat(Array.isArray(v) ? flattenDepth(v, depth - 1) : v), []) : arr.reduce((a, v) => a.concat(v), []),
+// 22.根据给定函数对数组元素进行分组
+// groupby: 根据给定函数对数组元素进行分组
+// 使用Array.map()将数组的值映射到函数或属性名。使用Array.reduce()创建一个对象, 其中的键是从映射的结果生成的。
+// groupBy: (arr, func) => arr.map(typeof func === 'function' ? func : val => val[func]).reduce((acc, val, i) => { acc[val] = (acc[val] || []).concat(arr[i]); return acc; }, {}),
+// 23.返回列表的头
+// head: 返回列表的头
+// 使用arr[0]可返回传递的数组的第一个元素。
+let head = arr => arr[0];
+// 24.返回除最后一个数组之外的所有元素
+// initial: 返回除最后一个数组之外的所有元素
+// 使用 "arr.slice(0,-1)" 返回数组的最后一个元素。
+let initial = arr => arr.slice(0, -1);
+// 25.初始化并填充具有指定值的数组
+// initializeArrayWithRange: 初始化并填充具有指定值的数组
+// 使用Array(n)创建所需长度的数组,fill(v)以填充所需的值。可以省略value以使用默认值0.
+let initializeArrayWithRange = (end, start = 0) => Array.from({
+    length: end - start
+}).map((v, i) => i + start);
+// 26.初始化并填充具有指定值的数组
+// initializeArrayWithValues: 初始化并填充具有指定值的数组
+// 使用Array(n)创建所需长度的数组,fill(v)以填充所需的值。可以省略value以使用默认值0
+let initializeArrayWithValues = (n, value = 0) => Array(n).fill(value);
+// 27.返回两个数组中存在的元素的列表
+// intersection: 返回两个数组中存在的元素的列表
+// 从b创建Set, 然后使用Array.filter()on a只保留b中包含的值.
+let intersection = (a, b) => {
+    const s = new Set(b);
+    return a.filter(x => s.has(x));
+};
+// 28.返回数组中的最后一个元素
+// last: 返回数组中的最后一个元素
+// 使用arr.length - 1可计算给定数组的最后一个元素的索引并返回它
+let last = arr => arr[arr.length - 1];
+// 29.使用函数将数组的值映射到对象, 其中键值对由原始值作为键和映射值组成
+// mapObject: 使用函数将数组的值映射到对象, 其中键值对由原始值作为键和映射值组成
+// 使用匿名内部函数范围来声明未定义的内存空间, 使用闭包来存储返回值。使用新的Array可将该数组与函数的映射放在其数据集上, 而逗号运算符返回第二个步骤, 而不需要从一个上下文移动到另一个环境 (由于关闭和操作顺序)。
+let mapObject = (arr, fn) => (a => (a = [arr, arr.map(fn)], a[0].reduce((acc, val, ind) => (acc[val] = a[1][ind], acc), {})))
+    ();
+// 30.nthElement: 返回数组的第 n 个元素
+// nthElement: 返回数组的第 n 个元素
+// 使用Array.slice()可获取包含第 n 个元素的数组。如果索引超出界限, 则返回[]。省略第二个参数n, 以获取数组的第一个元素
+let nthElement = (arr, n = 0) => (n > 0 ? arr.slice(n, n + 1) : arr.slice(n))[0];
+// 31.从对象中选取对应于给定键的键值对
+// pick: 从对象中选取对应于给定键的键值对
+// 使用Array.reduce()将筛选/选取的密钥转换回具有相应键值对的对象 (如果在 obj 中存在该键)。
+let pick = (obj, arr) => arr.reduce((acc, curr) => (curr in obj && (acc[curr] = obj[curr]), acc), {});
+// 32.对原始数组进行变异, 以筛选出指定的值
+// pull: 对原始数组进行变异, 以筛选出指定的值
+// 使用Array.filter()和Array.includes()来拉出不需要的值。使用Array.length = 0可将传入的数组中的长度重置为零, 并将其设置为Array.push(), 以便仅使用所提取的值填充它。
+let pull = (arr, ...args) => {
+    let pulled = arr.filter((v, i) => !args.includes(v));
+    arr.length = 0;
+    pulled.forEach(v => arr.push(v));
+};
+// 33.从数组中移除给定函数返回false的元素
+// remove: 从数组中移除给定函数返回false的元素
+//  使用Array.filter()查找返回 truthy 值的数组元素和Array.reduce()以使用Array.splice()删除元素。使用三参数 (func value, index, array调用函数).
+let remove = (arr, func) => Array.isArray(arr) ? arr.filter(func).reduce((acc, val) => {
+    arr.splice(arr.indexOf(val), 1);
+    return acc.concat(val);
+}, []) : [];
+// 34.返回数组中的随机元素
+// sample: 返回数组中的随机元素
+// 使用Math.random()生成一个随机数, 将它与length相乘, 并使用数学将其舍入到最接近的整数Math.floor()。此方法也适用于字符串
+let sample = arr => arr[Math.floor(Math.random() * arr.length)];
+// 35.随机数组值的顺序
+// shuffle: 随机数组值的顺序
+// 使用Array.sort()可在比较器中使用Math.random()重新排序元素。
+let shuffle = arr => arr.sort(() => Math.random() - 0.5);
+// 36.返回两个数组中都显示的元素的数组
+// similarity: 返回两个数组中都显示的元素的数组
+// 使用filter()可删除不属于values的值, 使用includes()确定.
+let similarity = (arr, values) => arr.filter(v => values.includes(v));
+// 37.返回两个数组之间的对称差
+// symmetricDifference: 返回两个数组之间的对称差
+// 从每个数组创建一个Set, 然后对它们中的每一个都使用Array.filter(), 以便只保留其他值中不包含的数值。
+let symmetricDifference = (a, b) => {
+    const sA = new Set(a),
+        sB = new Set(b);
+    return [...a.filter(x => !sB.has(x)), ...b.filter(x => !sA.has(x))];
+};
+// 38.返回数组中的所有元素, 除第一个
+// tail: 返回数组中的所有元素, 除第一个
+// 如果数组的length大于1, 则返回arr.slice(1), 否则返回整个数组。
+let tail = arr => arr.length > 1 ? arr.slice(1) : arr;
+// 39.返回一个数组, 其中 n 个元素从开始处移除
+// take: 返回一个数组, 其中 n 个元素从开始处移除
+// 使用Array.slice()创建数组的切片, 其中包含从开始处取出的n元素
+let take = (arr, n = 1) => arr.slice(0, n);
+// 40.返回一个数组, 其中 n 个元素从末尾移除
+// takeRight: 返回一个数组, 其中 n 个元素从末尾移除
+// 使用Array.slice()创建数组的切片, 其中包含从末尾取出的n元素
+let takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
+// 41.返回在两个数组中的任意一个中存在的每个元素
+// union: 返回在两个数组中的任意一个中存在的每个元素
+// 创建一个Set, 其中包含a和b的所有值, 并将其转换为数组。
+let union = (a, b) => Array.from(new Set([...a, ...b]));
+// 42.筛选出数组中具有指定值之一的元素
+// without: 筛选出数组中具有指定值之一的元素
+// 使用Array.filter()创建不包括的数组 (使用!Array.includes()) 所有给定值。
+let without = (arr, ...args) => arr.filter(v => !args.includes(v));
+// 43.创建基于原始数组中的位置分组的元素数组
+// zip: 创建基于原始数组中的位置分组的元素数组
+// 使用Math.max.apply()获取参数中最长的数组。创建一个以该长度为返回值的数组, 并使用 map 函数创建一个分组元素的数组Array.from()如果参数数组的长度不同, 则在未找到任何值的情况下使用undefined。
+let zip = (...arrays) => {
+    const maxLength = Math.max(...arrays.map(x => x.length));
+    return Array.from({
+        length: maxLength
+    }).map((_, i) => {
+        return Array.from({
+            length: arrays.length
+        }, (_, k) => arrays[k][i]);
+    })
+};
+// 44.从给定数组中移除一项
+// 从给定数组中移除一项
+let removeArrayItem = function(arr, item) {
+    var i = 0;
+    while (i < arr.length) {
+        if (arr[i] == item) {
+            arr.splice(i, 1);
+        } else {
+            i++;
+        }
+    }
+    return arr;
+};
+// 45.检查给定数组中是否包含某项
+// 检查给定数组中是否包含某项
+let contains = function(arr, item) {
+    var i = arr.length;
+    while (i--) {
+        if (arr[i] === item) {
+            return true;
+        }
+    }
+    return false;
+};
+// 46.验证不能包含字母
+ /**
+ * @param { string } value
+  */
+ export const isNoWord = value => /^[^A-Za-z]*$/g.test(value);
+// 47.验证中文和数字
+/**
+@param { string } value
+*/
+export const isCHNAndEN = value => /^((?:[\u3400-\u4DB5\u4E00-\u9FEA\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0])|(\d))+$/g.test(value);
+// 48.验证邮政编码(中国)
+/**
+@param { string } value
+*/
+export const isPostcode = value => /^(0[1-7]|1[0-356]|2[0-7]|3[0-6]|4[0-7]|5[1-7]|6[1-7]|7[0-5]|8[013-6])\d{4}$/g.test(value);
+// 49.验证微信号，6至20位，以字母开头，字母，数字，减号，下划线
+/**
+@param { string } value
+*/
+export const isWeChatNum = value => /^[a-zA-Z][-_a-zA-Z0-9]{5,19}$/g.test(value);
+// 50.验证16进制颜色
+/**
+@param { string } value
+*/
+export const isColor16 = value => /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/g.test(value);
+// 51.验证火车车次
+/**
+@param { string } value
+*/
+export const isTrainNum = value => /^[GCDZTSPKXLY1-9]\d{1,4}$/g.test(value);
+// 52.验证手机机身码(IMEI)
+/**
+@param { string } value
+*/
+export const isIMEI = value => /^\d{15,17}$/g.test(value);
+// 53.验证必须带端口号的网址(或ip)
+/**
+@param { string } value
+*/
+export const isHttpAndPort = value => /^((ht|f)tps?:\/\/)?[\w-]+(\.[\w-]+)+:\d{1,5}\/?$/g.test(value);
+// 54.验证网址(支持端口和"?+参数"和"#+参数)
+/**
+@param { string } value
+*/
+export const isRightWebsite = value => /^(((ht|f)tps?):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/g.test(value);
+// 55.验证统一社会信用代码
+/**
+@param { string } value
+*/
+export const isCreditCode = value => /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/g.test(value);
+// 56.验证迅雷链接
+/**
+@param { string } value
+*/
+export const isThunderLink = value => /^thunderx?:\/\/[a-zA-Z\d]+=$/g.test(value);
+// 57.验证ed2k链接(宽松匹配)
+/**
+@param { string } value
+*/
+export const ised2k = value => /^ed2k:\/\/\|file\|.+\|\/$/g.test(value);
+// 58.验证磁力链接(宽松匹配)
+/**
+@param { string } value
+*/
+export const isMagnet = value => /^magnet:\?xt=urn:btih:[0-9a-fA-F]{40,}.*$/g.test(value);
+// 59.验证子网掩码
+/**
+@param { string } value
+*/
+export const isSubnetMask = value => /^(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(?:\.(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/g.test(value);
+// 60.验证linux"文件夹"路径
+/**
+@param { string } value
+*/
+export const isLinuxFolderPath = value => /^(\/[^/]+)+\/?$/g.test(value);
+// 61.验证linux"文件"路径
+/**
+@param { string } value
+*/
+export const isLinuxFilePath = value => /^(\/[^/]+)+$/g.test(value);
+// 62.验证window"文件夹"路径
+/**
+@param { string } value
+*/
+export const isWindowsFolderPath = value => /^[a-zA-Z]:\\(?:\w+\\?)*$/g.test(value);
+// 63.验证window下"文件"路径
+/**
+@param { string } value
+*/
+export const isWindowsFilePath = value => /^[a-zA-Z]:\\(?:\w+\\)*\w+\.\w+$/g.test(value);
+// 64.验证股票代码(A股)
+/**
+@param { string } value
+*/
+export const isAShare = value => /^(s[hz]|S[HZ])(000[\d]{3}|002[\d]{3}|300[\d]{3}|600[\d]{3}|60[\d]{4})$/g.test(value);
+// 65.验证版本号格式必须为X.Y.Z
+/**
+@param { string } value
+*/
+export const isVersion = value => /^\d+(?:\.\d+){2}$/g.test(value);
+// 66.验证视频链接地址（视频格式可按需增删）
+/**
+@param { string } value
+*/
+export const isVideoUrl = value => /^https?:\/\/(.+\/)+.+(\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4))$/i.test(value);
+// 67.验证图片链接地址（图片格式可按需增删）
+/**
+@param { string } value
+*/
+export const isImageUrl = value => /^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif))$/i.test(value);
+// 68.验证银行卡号（10到30位, 覆盖对公/私账户, 参考微信支付）
+/**
+@param { string } value
+*/
+export const isAccountNumber = value => /^[1-9]\d{9,29}$/g.test(value);
+// 69.验证中文姓名
+/**
+@param { string } value
+*/
+export const isChineseName = value => /^(?:[\u4e00-\u9fa5·]{2,16})$/g.test(value);
+// 70.验证英文姓名
+/**
+@param { string } value
+*/
+export const isEnglishName = value => /(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/g.test(value);
+// 71.验证车牌号(新能源)
+
+/**
+@param { string } value
+*/
+export const isLicensePlateNumberNER = value => /[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领 A-Z]{1}[A-HJ-NP-Z]{1}(([0-9]{5}[DF])|([DF][A-HJ-NP-Z0-9][0-9]{4}))$/g.test(value);
+// 72.验证车牌号(非新能源)
+
+/**
+@param { string } value
+*/
+export const isLicensePlateNumberNNER = value => /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领 A-Z]{1}[A-HJ-NP-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/g.test(value);
+// 73.验证车牌号(新能源+非新能源)
+
+/**
+@param { string } value
+*/
+export const isLicensePlateNumber = value => /^(?:[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领 A-Z]{1}[A-HJ-NP-Z]{1}(?:(?:[0-9]{5}[DF])|(?:[DF](?:[A-HJ-NP-Z0-9])[0-9]{4})))|(?:[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领 A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9 挂学警港澳]{1})$/g.test(value);
+// 74.验证手机号中国(严谨), 根据工信部2019年最新公布的手机号段
+/**
+@param { string } value
+*/
+export const isMPStrict = value => /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/g.test(value);
+// 75.验证手机号中国(宽松), 只要是13,14,15,16,17,18,19开头即可
+/**
+@param { string } value
+*/
+export const isMPRelaxed = value => /^(?:(?:\+|00)86)?1[3-9]\d{9}$/g.test(value);
+// 76.验证email(邮箱)
+/**
+@param { string } value
+*/
+export const isEmail = value => /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g.test(value);
+// 77.验证座机电话(国内),如: 0341-86091234
+
+/**
+@param { string } value
+*/
+export const isLandlineTelephone = value => /\d{3}-\d{8}|\d{4}-\d{7}/g.test(value);
+// 78.验证身份证号(1代,15位数字)
+
+/**
+@param { string } value
+*/
+export const isIDCardOld = value => /^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$/g.test(value);
+// 79.验证身份证号(2代,18位数字),最后一位是校验位,可能为数字或字符X
+
+/**
+@param { string } value
+*/
+export const isIDCardNew = value => /^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}[\dXx]$/g.test(value);
+// 80.验证身份证号, 支持1/2代(15位/18位数字)
+
+/**
+@param { string } value
+*/
+export const isIDCard = value => /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/g.test(value);
+// 81.验证护照（包含香港、澳门）
+
+/**
+@param { string } value
+*/
+export const isPassport = value => /(^[EeKkGgDdSsPpHh]\d{8}$)|(^(([Ee][a-fA-F])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa])|(1[45]))\d{7}$)/g.test(value);
+// 82.验证帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线组合
+
+/**
+@param { string } value
+*/
+export const isWebAccount = value => /^[a-zA-Z]\w{4,15}$/g.test(value);
+// 83.验证中文/汉字
+
+/**
+@param { string } value
+*/
+export const isChineseCharacter = value => /^(?:[\u3400-\u4DB5\u4E00-\u9FEA\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0])+$/g.test(value);
+// 84.验证小数
+
+/**
+@param { string } value
+*/
+export const isDecimal = value => /^\d+\.\d+$/g.test(value);
+// 85.验证数字
+
+/**
+@param { string } value
+*/
+export const isNumber = value => /^\d{1,}$/g.test(value);
+// 86.验证qq号格式
+
+/**
+@param { string } value
+*/
+export const isQQNum = value => /^[1-9][0-9]{4,10}$/g.test(value);
+
+// 92.获取url参数（第一种）
+
+/**
+
+ * @param {*} name
+ * @param {*} origin
+   */
+export function getUrlParam(name, origin = null) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    let r = null;
+    if (origin == null) {
+        r = window.location.search.substr(1).match(reg);
+    } else {
+        r = origin.substr(1).match(reg);
+    }
+    if (r != null) return decodeURIComponent(r[2]);
+    return null;
+}
+// 93.获取url参数（第二种）
+
+ /**
+     * @param {*} name
+     * @param {*} origin
+       */
+       export function getUrlParams(name, origin = null) {
+       let url = location.href;
+       let temp1 = url.split('?');
+       let pram = temp1[1];
+       let keyValue = pram.split('&');
+       let obj = {};
+       for (let i = 0; i < keyValue.length; i++) {
+           let item = keyValue[i].split('=');
+       let key = item[0];
+        let value = item[1];
+        obj[key] = value;
+    }
+    return obj[name];
+
+    }
+// 94.修改url中的参数
+
+ /**
+     * @param { string } paramName
+     * @param { string } replaceWith
+       */
+       export function replaceParamVal(paramName,replaceWith) {
+   var oUrl = location.href.toString();
+    var re=eval('/('+ paramName+'=)([^&]*)/gi');
+    location.href = oUrl.replace(re,paramName+'='+replaceWith);
+    return location.href;
+    }
+// 95.删除url中指定的参数
+
+ /**
+     * @param { string } name
+       */
+       export function funcUrlDel(name){
+       var loca =location;
+       var baseUrl = loca.origin + loca.pathname + "?";
+       var query = loca.search.substr(1);
+       if (query.indexOf(name)>-1) {
+           var obj = {};
+           var arr = query.split("&");
+           for (var i = 0; i < arr.length; i++) {
+               arr[i] = arr[i].split("=");
+               obj[arr[i][0]] = arr[i][1];
+           }
+           delete obj[name];
+       var url = baseUrl + JSON.stringify(obj).replace(/[\"\{\}]/g,"").replace(/\:/g,"=").replace(/\,/g,"&");
+        return url
+    }
+    }
+// 96.获取窗口可视范围的高度
+
+export function getClientHeight() {
+    let clientHeight = 0;
+    if (document.body.clientHeight && document.documentElement.clientHeight) {
+        clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
+    }
+    else {
+        clientHeight = (document.body.clientHeight > document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
+    }
+    return clientHeight;
+}
+// 97.获取窗口可视范围宽度
+
+export function getPageViewWidth() {
+    let d = document,
+        a = d.compatMode == "BackCompat" ? d.body : d.documentElement;
+    return a.clientWidth;
+}
+// 98.获取窗口宽度
+
+export function getPageWidth() {
+    let g = document,
+        a = g.body,
+        f = g.documentElement,
+        d = g.compatMode == "BackCompat" ? a : g.documentElement;
+    return Math.max(f.scrollWidth, a.scrollWidth, d.clientWidth);
+}
+// 99.获取窗口尺寸
+
+export function getViewportOffset() {
+    if (window.innerWidth) {
+        return {
+            w: window.innerWidth,
+            h: window.innerHeight
+        }
+    } else {
+        // ie8及其以下
+        if (document.compatMode === "BackCompat") {
+            // 怪异模式
+            return {
+                w: document.body.clientWidth,
+                h: document.body.clientHeight
+            }
+        } else {
+            // 标准模式
+            return {
+                w: document.documentElement.clientWidth,
+                h: document.documentElement.clientHeight
+            }
+        }
+    }
+}
+// 100.获取滚动条距顶部高度
+
+export function getPageScrollTop() {
+    let a = document;
+    return a.documentElement.scrollTop || a.body.scrollTop;
+}
+// 101.获取滚动条距左边的高度
+
+export function getPageScrollLeft() {
+    let a = document;
+    return a.documentElement.scrollLeft || a.body.scrollLeft;
+}
+// 104.返回当前滚动条位置
+
+export const getScrollPosition = (el = window) => ({
+    x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
+    y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
+});
+// 105.滚动到指定元素区域
+
+export const smoothScroll = element =>{
+    document.querySelector(element).scrollIntoView({
+        behavior: 'smooth'
+    });
+};
+// 106.平滑滚动到页面顶部
+
+export const scrollToTop = () => {
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    if (c > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        window.scrollTo(0, c - c / 8);
+    }
+};
+// 107.http跳转https
+
+export const httpsRedirect = () => {
+    if (location.protocol !== 'https:') location.replace('https://' + location.href.split('//')[1]);
+};
+// 108.检查页面底部是否可见
+
+export const bottomVisible = () =>{
+    return document.documentElement.clientHeight + window.scrollY >=
+        (document.documentElement.scrollHeight || document.documentElement.clientHeight);
+};
+// 109.打开一个窗口
+
+ /**
+     * @param { string } url
+     * @param { string } windowName
+     * @param { number } width
+     * @param { number } height
+       */
+       export function openWindow(url, windowName, width, height) {
+       var x = parseInt(screen.width / 2.0) - width / 2.0;
+       var y = parseInt(screen.height / 2.0) - height / 2.0;
+       var isMSIE = navigator.appName == "Microsoft Internet Explorer";
+       if (isMSIE) {
+           var p = "resizable=1,location=no,scrollbars=no,width=";
+           p = p + width;
+           p = p + ",height=";
+           p = p + height;
+           p = p + ",left=";
+           p = p + x;
+           p = p + ",top=";
+           p = p + y;
+           window.open(url, windowName, p);
+       } else {
+           var win = window.open(
+               url,
+               "ZyiisPopup",
+               "top=" +
+               y +
+               ",left=" +
+               x +
+               ",scrollbars=" +
+               scrollbars +
+               ",dialog=yes,modal=yes,width=" +
+               width +
+               ",height=" +
+           height +
+            ",resizable=no"
+        );
+        eval("try { win.resizeTo(width, height); } catch(e) { }");
+        win.focus();
+    }
+    }
+// 110.自适应页面（rem）
+
+ /**
+     * @param { number } width
+       */
+       export function AutoResponse(width = 750) {
+       const target = document.documentElement;
+   target.clientWidth >= 600
+        ? (target.style.fontSize = "80px")
+        : (target.style.fontSize = target.clientWidth / width * 100 + "px");
+    }
 
 // 130.blob转file
  /**
